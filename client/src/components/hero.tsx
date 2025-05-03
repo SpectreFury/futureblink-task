@@ -1,10 +1,25 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { SignedIn, SignedOut, SignInButton } from "@clerk/react-router";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  useAuth,
+} from "@clerk/react-router";
 import { ArrowRight, Rocket } from "lucide-react";
-import { NavLink } from "react-router";
+import { useEffect } from "react";
+import { NavLink, useNavigate } from "react-router";
 
 const Hero = () => {
+  const { isSignedIn, isLoaded } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isLoaded && isSignedIn) {
+      navigate("/dashboard");
+    }
+  }, [isSignedIn, isLoaded]);
+
   return (
     <div
       className={cn(
