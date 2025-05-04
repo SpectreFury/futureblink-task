@@ -8,6 +8,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Button } from "./ui/button";
+import { useNodesState } from "@xyflow/react";
 
 type SourceItem = {
   value: string;
@@ -29,6 +30,8 @@ const SelectSource = ({ setCurrentModal }: SelectSourceProps) => {
     { value: "Source List", label: "This is a source list", emails: [] },
   ]);
   const [selectedSourceList, setSelectedSourceList] = useState("");
+
+  const insertSelectedSource = async () => {};
 
   const fetchSourceLists = async () => {
     const response = await fetch(

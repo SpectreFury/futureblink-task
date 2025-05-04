@@ -7,18 +7,13 @@ import {
   Controls,
   MiniMap,
   ReactFlow,
-  Node,
-  Edge,
-  applyNodeChanges,
-  applyEdgeChanges,
-  NodeChange,
-  EdgeChange,
 } from "@xyflow/react";
 
 import "@xyflow/react/dist/style.css";
 import { Button } from "./ui/button";
 import LeadSourceNode from "./nodes/LeadSourceNode";
 import LeadNode from "./nodes/LeadNode";
+import { useReactFlowStore } from "@/store/useReactFlowStore";
 
 const nodeTypes = {
   leadSource: LeadSourceNode,
@@ -31,19 +26,15 @@ const SequenceEditor = () => {
   const { userId } = useAuth();
   const reactFlowWrapper = useRef<HTMLDivElement | null>(null);
 
-  const [nodes, setNodes] = useState<Node[]>([]);
-  const [edges, setEdges] = useState<Edge[]>([]);
-
-  const onNodesChange = useCallback(
-    (changes: NodeChange<Node>[]) =>
-      setNodes((nodes) => applyNodeChanges(changes, nodes)),
-    []
-  );
-  const onEdgesChange = useCallback(
-    (changes: EdgeChange<Edge>[]) =>
-      setEdges((edges) => applyEdgeChanges(changes, edges)),
-    []
-  );
+  const {
+    nodes,
+    edges,
+    setNodes,
+    setEdges,
+    onConnect,
+    onEdgesChange,
+    onNodesChange,
+  } = useReactFlowStore();
 
   const { id } = useParams();
 

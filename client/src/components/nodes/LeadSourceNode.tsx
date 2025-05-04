@@ -21,7 +21,7 @@ const LeadSourceNode = () => {
         </DialogContent>
       </Dialog>
       <div
-        className="nodrag flex flex-col items-center border px-2 py-1 bg-gray-50 rounded cursor-pointer"
+        className=" flex flex-col items-center border px-2 py-1 bg-gray-50 rounded cursor-pointer"
         onClick={() => setOpen(true)}
       >
         <Plus />
