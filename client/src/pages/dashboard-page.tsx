@@ -29,10 +29,18 @@ const DashboardPage = () => {
   const [description, setDescription] = useState("");
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const { isSignedIn, isLoaded, userId } = useAuth();
   const navigate = useNavigate();
 
   const createSequence = async () => {
+    setError("");
+
+    if (!name || !description) {
+      setError("All the fields are required");
+      return;
+    }
+
     setLoading(true);
     try {
       const serverUrl = import.meta.env.VITE_SERVER_URL;
@@ -108,6 +116,8 @@ const DashboardPage = () => {
                       Name
                     </Label>
                     <Input
+                      minLength={6}
+                      maxLength={50}
                       id="name"
                       className="col-span-3"
                       placeholder="Ayush's sequence"
@@ -120,6 +130,8 @@ const DashboardPage = () => {
                       Description
                     </Label>
                     <Input
+                      minLength={10}
+                      maxLength={100}
                       id="description"
                       className="col-span-3"
                       placeholder="You can add a small description"
@@ -128,6 +140,7 @@ const DashboardPage = () => {
                     />
                   </div>
                 </div>
+                {error && <p className="text-red-500">{error}</p>}
                 <DialogFooter>
                   <Button
                     type="submit"
