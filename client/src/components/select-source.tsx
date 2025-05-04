@@ -8,15 +8,18 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Button } from "./ui/button";
-import { useNodesState } from "@xyflow/react";
+import { useReactFlowStore } from "@/store/useReactFlowStore";
+import { v4 as uuidv4 } from "uuid";
 
 type SourceItem = {
+  id: string;
   value: string;
   label: string;
   emails: string[];
 };
 
 type SourceListItem = {
+  _id: string;
   name: string;
   emails: string[];
 };
@@ -26,12 +29,34 @@ type SelectSourceProps = {
 };
 
 const SelectSource = ({ setCurrentModal }: SelectSourceProps) => {
-  const [sourceList, setSourceList] = useState<SourceItem[]>([
-    { value: "Source List", label: "This is a source list", emails: [] },
-  ]);
+  const [sourceList, setSourceList] = useState<SourceItem[]>([]);
   const [selectedSourceList, setSelectedSourceList] = useState("");
 
-  const insertSelectedSource = async () => {};
+  const { nodes, setNodes } = useReactFlowStore();
+
+  const insertSelectedSource = async () => {
+    // Make sure there is a selected node before making a new node
+    if (!selectedSourceList) {
+      return;
+    }
+
+    // Add a new node to the state
+    const selectedList = sourceList.find(
+      (item) => item.id === selectedSourceList
+    );
+
+    const newNode = {
+      id: uuidv4(),
+      type: "lead",
+      position: { x: 0, y: 0 },
+      data: {
+        label: "This is another node",
+        leadSource: selectedList,
+      },
+    };
+
+    setNodes([...nodes, newNode]);
+  };
 
   const fetchSourceLists = async () => {
     const response = await fetch(
@@ -46,8 +71,9 @@ const SelectSource = ({ setCurrentModal }: SelectSourceProps) => {
 
       for (let item of sourceLists) {
         newArray.push({
+          id: item._id,
           label: item.name,
-          value: item.name,
+          value: item._id,
           emails: item.emails,
         });
       }
@@ -85,7 +111,9 @@ const SelectSource = ({ setCurrentModal }: SelectSourceProps) => {
         </SelectContent>
       </Select>
       <div className="flex justify-between gap-2">
-        <Button className="grow">Insert</Button>
+        <Button className="grow" onClick={insertSelectedSource}>
+          Insert
+        </Button>
         <Button
           variant="outline"
           className="grow"
