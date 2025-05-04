@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 
 const Sequence = require("../models/sequence");
+const SourceList = require("../models/source-list");
+
+const { convertEmailStringToArray } = require("../utils/helpers");
 
 router.post("/sequence", async (req, res) => {
   try {
@@ -59,8 +62,45 @@ router.post("/create/sequence", async (req, res) => {
   });
 });
 
-router.post("/source-list", async (req, res) => {});
+router.get("/source-lists", async (req, res) => {
+  try {
+    const sourceLists = await SourceList.find();
 
-router.post("/create/source-list", async (req, res) => {});
+    res.json({
+      sourceLists,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+});
+
+router.post("/create/source-list", async (req, res) => {
+  try {
+    const { sourceListName, emails } = req.body;
+
+    if (!sourceListName || !emails) {
+      throw new Error("Source list name or email was not found");
+    }
+
+    // Create an array from the string
+    const emailArray = convertEmailStringToArray(emails);
+
+    // Create a source list
+    const result = await SourceList.create({
+      name: sourceListName,
+      emails: emailArray,
+    });
+
+    res.json({
+      sourceList: result,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+});
 
 module.exports = router;

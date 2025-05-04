@@ -18,9 +18,11 @@ import {
 import "@xyflow/react/dist/style.css";
 import { Button } from "./ui/button";
 import LeadSourceNode from "./nodes/LeadSourceNode";
+import LeadNode from "./nodes/LeadNode";
 
 const nodeTypes = {
   leadSource: LeadSourceNode,
+  lead: LeadNode,
 };
 
 const SequenceEditor = () => {
