@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router";
 
 import HeroPage from "./pages/hero-page";
 import DashboardPage from "./pages/dashboard-page";
+import SequencePage from "./pages/sequence-page";
 
 const router = createBrowserRouter([
   {
@@ -11,6 +12,10 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: <DashboardPage />,
+  },
+  {
+    path: "/dashboard/:id",
+    element: <SequencePage />,
   },
 ]);
 

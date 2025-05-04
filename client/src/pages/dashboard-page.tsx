@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Navbar from "@/components/navbar";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,8 +25,41 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router";
 
 const DashboardPage = () => {
-  const { isSignedIn, isLoaded } = useAuth();
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { isSignedIn, isLoaded, userId } = useAuth();
   const navigate = useNavigate();
+
+  const createSequence = async () => {
+    setLoading(true);
+    try {
+      const serverUrl = import.meta.env.VITE_SERVER_URL;
+      if (!serverUrl) {
+        throw new Error("There is no server");
+      }
+
+      const response = await fetch(`${serverUrl}/create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId,
+          name,
+          description,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+
+        navigate(`/dashboard/${data.sequenceId}`);
+      }
+    } catch (error) {}
+    setLoading(false);
+  };
 
   useEffect(() => {
     if (!isSignedIn && isLoaded) {
@@ -55,7 +89,7 @@ const DashboardPage = () => {
             </div>
           </CardContent>
           <CardFooter>
-            <Dialog>
+            <Dialog open={open} onOpenChange={(isOpen) => setOpen(isOpen)}>
               <DialogTrigger asChild>
                 <Button variant="outline" className="cursor-pointer">
                   Create new
@@ -77,6 +111,8 @@ const DashboardPage = () => {
                       id="name"
                       className="col-span-3"
                       placeholder="Ayush's sequence"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
                     />
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
@@ -87,11 +123,19 @@ const DashboardPage = () => {
                       id="description"
                       className="col-span-3"
                       placeholder="You can add a small description"
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
                     />
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button type="submit">Create</Button>
+                  <Button
+                    type="submit"
+                    onClick={createSequence}
+                    disabled={loading}
+                  >
+                    Create
+                  </Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
