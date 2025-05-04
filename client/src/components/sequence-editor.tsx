@@ -1,5 +1,5 @@
 import { useAuth } from "@clerk/react-router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams } from "react-router";
 import {
   Background,
@@ -7,28 +7,35 @@ import {
   Controls,
   MiniMap,
   ReactFlow,
+  Node,
+  Edge,
+  applyNodeChanges,
+  applyEdgeChanges,
+  NodeChange,
+  EdgeChange,
 } from "@xyflow/react";
 
 import "@xyflow/react/dist/style.css";
-
-const initialEdges = [{ id: "e1-2", source: "1", target: "2" }];
 
 const SequenceEditor = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const { userId } = useAuth();
+  const reactFlowWrapper = useRef<HTMLDivElement | null>(null);
 
-  const [nodes, setNodes] = useState([
-    {
-      id: "1",
-      position: { x: 100, y: 100 },
-      data: {
-        label: "Add lead source",
-      },
-    },
-  ]);
+  const [nodes, setNodes] = useState<Node[]>([]);
+  const [edges, setEdges] = useState<Edge[]>([]);
 
-  const [edges, setEdges] = useState([]);
+  const onNodesChange = useCallback(
+    (changes: NodeChange<Node>[]) =>
+      setNodes((nodes) => applyNodeChanges(changes, nodes)),
+    []
+  );
+  const onEdgesChange = useCallback(
+    (changes: EdgeChange<Edge>[]) =>
+      setEdges((edges) => applyEdgeChanges(changes, edges)),
+    []
+  );
 
   const { id } = useParams();
 
@@ -63,14 +70,37 @@ const SequenceEditor = () => {
     }
   }, [userId]);
 
+  useEffect(() => {
+    if (reactFlowWrapper.current) {
+      const width = reactFlowWrapper.current.offsetWidth;
+
+      const centerX = width / 2 - 75;
+
+      setNodes([
+        {
+          id: "1",
+          position: { x: centerX, y: 100 },
+          data: {
+            label: "Add lead source",
+          },
+        },
+      ]);
+    }
+  }, [reactFlowWrapper]);
+
   return (
     <div className="container mx-auto w-full grow">
       <div className="mt-10">
         <div className="text-2xl font-medium">{name}</div>
         <div className="text-lg text-muted-foreground">{description}</div>
       </div>
-      <div className="w-full h-full">
-        <ReactFlow nodes={nodes} edges={edges}>
+      <div className="w-full h-full" ref={reactFlowWrapper}>
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+        >
           <Controls />
           <MiniMap />
           <Background
