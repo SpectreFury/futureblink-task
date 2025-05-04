@@ -3,20 +3,6 @@ const router = express.Router();
 
 const Sequence = require("../models/sequence");
 
-router.post("/create", async (req, res) => {
-  const { userId, name, description } = req.body;
-
-  const result = await Sequence.create({
-    userId: userId,
-    name: name,
-    description: description,
-  });
-
-  res.json({
-    sequenceId: result._id,
-  });
-});
-
 router.post("/sequence", async (req, res) => {
   try {
     const { sequenceId, userId } = req.body;
@@ -58,5 +44,23 @@ router.post("/sequence", async (req, res) => {
     });
   }
 });
+
+router.post("/create/sequence", async (req, res) => {
+  const { userId, name, description } = req.body;
+
+  const result = await Sequence.create({
+    userId: userId,
+    name: name,
+    description: description,
+  });
+
+  res.json({
+    sequenceId: result._id,
+  });
+});
+
+router.post("/source-list", async (req, res) => {});
+
+router.post("/create/source-list", async (req, res) => {});
 
 module.exports = router;

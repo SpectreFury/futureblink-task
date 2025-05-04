@@ -16,6 +16,12 @@ import {
 } from "@xyflow/react";
 
 import "@xyflow/react/dist/style.css";
+import { Button } from "./ui/button";
+import LeadSourceNode from "./nodes/LeadSourceNode";
+
+const nodeTypes = {
+  leadSource: LeadSourceNode,
+};
 
 const SequenceEditor = () => {
   const [name, setName] = useState("");
@@ -79,6 +85,7 @@ const SequenceEditor = () => {
       setNodes([
         {
           id: "1",
+          type: "leadSource",
           position: { x: centerX, y: 100 },
           data: {
             label: "Add lead source",
@@ -90,9 +97,12 @@ const SequenceEditor = () => {
 
   return (
     <div className="container mx-auto w-full grow">
-      <div className="mt-10">
-        <div className="text-2xl font-medium">{name}</div>
-        <div className="text-lg text-muted-foreground">{description}</div>
+      <div className="mt-10 flex items-center justify-between">
+        <div>
+          <div className="text-2xl font-medium">{name}</div>
+          <div className="text-lg text-muted-foreground">{description}</div>
+        </div>
+        <Button>Save</Button>
       </div>
       <div className="w-full h-full" ref={reactFlowWrapper}>
         <ReactFlow
@@ -100,6 +110,7 @@ const SequenceEditor = () => {
           edges={edges}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
+          nodeTypes={nodeTypes}
         >
           <Controls />
           <MiniMap />

@@ -48,7 +48,7 @@ const DashboardPage = () => {
         throw new Error("There is no server");
       }
 
-      const response = await fetch(`${serverUrl}/create`, {
+      const response = await fetch(`${serverUrl}/create/sequence`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
