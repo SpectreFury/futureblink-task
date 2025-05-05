@@ -17,6 +17,7 @@ interface ReactFlowStoreState {
   onNodesChange: OnNodesChange<Node>;
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
+  getLastNode: () => Node | null;
 }
 
 const useReactFlowStore = create<ReactFlowStoreState>((set, get) => ({
@@ -36,6 +37,11 @@ const useReactFlowStore = create<ReactFlowStoreState>((set, get) => ({
   },
   onConnect: (connection) => {
     set({ edges: addEdge(connection, get().edges) });
+  },
+  getLastNode: () => {
+    if (!get().nodes.length) return null;
+
+    return get().nodes.at(-1) as Node;
   },
 }));
 

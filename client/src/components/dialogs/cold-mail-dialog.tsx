@@ -28,7 +28,7 @@ type ColdMailDialogProps = {
 
 const ColdMailDialog = ({ setCurrentDialog, setOpen }: ColdMailDialogProps) => {
   const { userId } = useAuth();
-  const { nodes, edges, setNodes, setEdges } = useReactFlowStore();
+  const { nodes, edges, setNodes, setEdges, getLastNode } = useReactFlowStore();
 
   const [emailTemplates, setEmailTemplates] = useState([
     {
@@ -79,8 +79,30 @@ const ColdMailDialog = ({ setCurrentDialog, setOpen }: ColdMailDialogProps) => {
         : node
     );
 
-    // This removes the connection between sequence start and plus
-    const newEdges = edges.filter((edge) => edge.id !== "startPoint-plus");
+    // This removes the connection between sequence start and plus if it exists
+    const newEdges = edges.filter((edge) => edge.target !== "plus");
+    // Add a connection from startPoint to newNode
+
+    let connection;
+    const lastNode = getLastNode()!;
+
+    console.log(lastNode);
+
+    if (lastNode.type === "emailTemplate") {
+      // Make the connection to be from previous node to new node
+      connection = {
+        id: `${lastNode.id}-${newNode.id}`,
+        source: lastNode.id,
+        target: newNode.id,
+      };
+    } else {
+      // Connection to be from start point to new node
+      connection = {
+        id: `startPoint-${newNode.id}`,
+        source: "sequence-start-point",
+        target: newNode.id,
+      };
+    }
 
     const newEdge = {
       id: `${newNode.id}-plus`,
@@ -91,14 +113,15 @@ const ColdMailDialog = ({ setCurrentDialog, setOpen }: ColdMailDialogProps) => {
     // Edge logic
     // If edge target is sequenceStartPoint -> Lead Source Node
     // If sequenceStartPoint is source and plus is target -> No nodes are added
-    console.log(edges);
+    console.log("Nodes: ", nodes);
+    console.log("Edges: ", edges);
+
+    console.log("Last added node: ", getLastNode());
 
     setNodes([...newNodes, newNode]);
-    setEdges([...newEdges, newEdge]);
+    setEdges([...newEdges, newEdge, connection]);
 
     setOpen(false);
-
-    console.log(selectedTemplate);
   };
 
   const fetchTemplates = async () => {

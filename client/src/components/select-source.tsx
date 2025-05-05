@@ -58,7 +58,7 @@ const SelectSource = ({ setCurrentModal, setOpen }: SelectSourceProps) => {
 
     const newEdge = {
       id: `${newNode.id}-startPoint`,
-      source: newNode.id,
+      source: `${newNode.id}`,
       target: "sequence-start-point",
     };
 
