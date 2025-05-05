@@ -16,12 +16,14 @@ import LeadNode from "./nodes/LeadNode";
 import { useReactFlowStore } from "@/store/useReactFlowStore";
 import SequenceStartPointNode from "./nodes/SequenceStartPointNode";
 import PlusNode from "./nodes/PlusNode";
+import EmailTemplateNode from "./nodes/EmailTemplateNode";
 
 const nodeTypes = {
   leadSource: LeadSourceNode,
   lead: LeadNode,
   sequenceStartPoint: SequenceStartPointNode,
   plus: PlusNode,
+  emailTemplate: EmailTemplateNode,
 };
 
 const SequenceEditor = () => {

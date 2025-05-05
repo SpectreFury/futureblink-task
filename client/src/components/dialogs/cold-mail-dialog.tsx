@@ -17,13 +17,18 @@ import { Label } from "../ui/label";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useAuth } from "@clerk/react-router";
+import { useReactFlowStore } from "@/store/useReactFlowStore";
+
+import { v4 as uuidv4 } from "uuid";
 
 type ColdMailDialogProps = {
   setCurrentDialog: any;
+  setOpen: any;
 };
 
-const ColdMailDialog = ({ setCurrentDialog }: ColdMailDialogProps) => {
+const ColdMailDialog = ({ setCurrentDialog, setOpen }: ColdMailDialogProps) => {
   const { userId } = useAuth();
+  const { nodes, edges, setNodes, setEdges } = useReactFlowStore();
 
   const [emailTemplates, setEmailTemplates] = useState([
     {
@@ -39,6 +44,35 @@ const ColdMailDialog = ({ setCurrentDialog }: ColdMailDialogProps) => {
 
   const navigate = useNavigate();
   const params = useParams();
+
+  const insertTemplate = () => {
+    if (!selectedEmailTemplate) return;
+
+    const selectedTemplate = emailTemplates.find(
+      (item) => item._id === selectedEmailTemplate
+    );
+
+    if (!selectedTemplate) return;
+
+    const newNode = {
+      id: uuidv4(),
+      type: "emailTemplate",
+      position: { x: 0, y: 0 },
+      data: {
+        label: selectedTemplate.templateName,
+        template: selectedTemplate,
+      },
+    };
+
+    // Edge logic
+
+    setNodes([...nodes, newNode]);
+    setEdges([...edges]);
+
+    setOpen(false);
+
+    console.log(selectedTemplate);
+  };
 
   const fetchTemplates = async () => {
     const response = await fetch(
@@ -91,7 +125,9 @@ const ColdMailDialog = ({ setCurrentDialog }: ColdMailDialogProps) => {
           </SelectContent>
         </Select>
         <div className="flex justify-between gap-2">
-          <Button className="grow cursor-pointer">Insert</Button>
+          <Button className="grow cursor-pointer" onClick={insertTemplate}>
+            Insert
+          </Button>
           <Button
             className="grow cursor-pointer"
             variant="outline"

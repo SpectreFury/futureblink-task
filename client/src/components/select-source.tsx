@@ -37,9 +37,7 @@ const SelectSource = ({ setCurrentModal, setOpen }: SelectSourceProps) => {
 
   const insertSelectedSource = async () => {
     // Make sure there is a selected node before making a new node
-    if (!selectedSourceList) {
-      return;
-    }
+    if (!selectedSourceList) return;
 
     // Add a new node to the state
     const selectedList = sourceList.find(
