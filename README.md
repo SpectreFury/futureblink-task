@@ -10,6 +10,7 @@
 - [x] Create a source list from emails
 - [x] Insert the source list as a Node
 
-## TOMMORROW
+## TODAY
 
-Try the ability to upload a csv if you have time
+- Make the connection from lead source to sequence start point
+- Make sequence start point

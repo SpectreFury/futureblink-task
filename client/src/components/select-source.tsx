@@ -45,12 +45,14 @@ const SelectSource = ({ setCurrentModal }: SelectSourceProps) => {
       (item) => item.id === selectedSourceList
     );
 
+    if (!selectedList) return;
+
     const newNode = {
       id: uuidv4(),
       type: "lead",
       position: { x: 0, y: 0 },
       data: {
-        label: "This is another node",
+        label: selectedList.label,
         leadSource: selectedList,
       },
     };

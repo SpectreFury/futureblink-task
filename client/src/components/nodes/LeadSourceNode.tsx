@@ -9,7 +9,7 @@ const LeadSourceNode = () => {
   const [currentModal, setCurrentModal] = useState("select");
 
   return (
-    <>
+    <div className="w-2xs">
       <Dialog open={open} onOpenChange={(isOpen) => setOpen(isOpen)}>
         <DialogContent className="sm:max-w-[425px]">
           {currentModal === "select" && (
@@ -28,7 +28,7 @@ const LeadSourceNode = () => {
         <div className="text-lg font-bold">Add Lead Source</div>
         <div>Click to add lead source from email</div>
       </div>
-    </>
+    </div>
   );
 };
 

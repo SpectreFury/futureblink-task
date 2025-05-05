@@ -1,7 +1,7 @@
 import { NavLink } from "react-router";
 
 type SequenceItemProps = {
-  _id: string;
+  id: string;
   name: string;
   description: string;
 };

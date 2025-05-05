@@ -14,10 +14,12 @@ import { Button } from "./ui/button";
 import LeadSourceNode from "./nodes/LeadSourceNode";
 import LeadNode from "./nodes/LeadNode";
 import { useReactFlowStore } from "@/store/useReactFlowStore";
+import SequenceStartPointNode from "./nodes/SequenceStartPointNode";
 
 const nodeTypes = {
   leadSource: LeadSourceNode,
   lead: LeadNode,
+  sequenceStartPoint: SequenceStartPointNode,
 };
 
 const SequenceEditor = () => {
@@ -77,11 +79,19 @@ const SequenceEditor = () => {
 
       setNodes([
         {
-          id: "1",
+          id: "add-lead-source",
           type: "leadSource",
           position: { x: centerX, y: 100 },
           data: {
             label: "Add lead source",
+          },
+        },
+        {
+          id: "sequence-start-point",
+          type: "sequenceStartPoint",
+          position: { x: centerX, y: 200 },
+          data: {
+            label: "Sequence Start Point",
           },
         },
       ]);
@@ -103,6 +113,7 @@ const SequenceEditor = () => {
           edges={edges}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
+          onConnect={onConnect}
           nodeTypes={nodeTypes}
         >
           <Controls />
