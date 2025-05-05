@@ -6,6 +6,24 @@ const SourceList = require("../models/source-list");
 
 const { convertEmailStringToArray } = require("../utils/helpers");
 
+router.get("/sequence", async (req, res) => {
+  try {
+    const sequences = await Sequence.find();
+
+    if (!sequences) {
+      res.json({ message: "No sequence was found" });
+    }
+
+    res.json({
+      sequences,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+});
+
 router.post("/sequence", async (req, res) => {
   try {
     const { sequenceId, userId } = req.body;

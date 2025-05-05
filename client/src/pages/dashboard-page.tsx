@@ -23,8 +23,17 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@clerk/react-router";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
+import SequenceItem from "@/components/sequence-item";
+
+type Sequence = {
+  _id: string;
+  userId: string;
+  name: string;
+  description: string;
+};
 
 const DashboardPage = () => {
+  const [sequences, setSequences] = useState<Sequence[]>([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [open, setOpen] = useState(false);
@@ -32,6 +41,18 @@ const DashboardPage = () => {
   const [error, setError] = useState("");
   const { isSignedIn, isLoaded, userId } = useAuth();
   const navigate = useNavigate();
+
+  const fetchSequences = async () => {
+    const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/sequence`);
+
+    if (response.ok) {
+      const { sequences } = await response.json();
+
+      setSequences(sequences);
+
+      console.log(sequences);
+    }
+  };
 
   const createSequence = async () => {
     setError("");
@@ -73,6 +94,10 @@ const DashboardPage = () => {
     if (!isSignedIn && isLoaded) {
       navigate("/");
     }
+
+    if (isSignedIn && isLoaded) {
+      fetchSequences();
+    }
   }, [isSignedIn, isLoaded]);
   return (
     <>
@@ -84,17 +109,14 @@ const DashboardPage = () => {
             <CardDescription>These are all the users sequences</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0  hover:bg-gray-200 p-2 rounded cursor-pointer">
-              <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500" />
-              <div className="space-y-1">
-                <p className="text-sm font-medium leading-none">
-                  Ayush's Sequence
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  A email marketing application
-                </p>
-              </div>
-            </div>
+            {sequences.map((sequence) => (
+              <SequenceItem
+                key={sequence._id}
+                id={sequence._id}
+                name={sequence.name}
+                description={sequence.description}
+              />
+            ))}
           </CardContent>
           <CardFooter>
             <Dialog open={open} onOpenChange={(isOpen) => setOpen(isOpen)}>
