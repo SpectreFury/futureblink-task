@@ -2,8 +2,10 @@ import Navbar from "@/components/navbar";
 import TipTap from "@/components/tiptap";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useAuth } from "@clerk/react-router";
 import { Label } from "@radix-ui/react-label";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router";
 import { toast } from "sonner";
 
 const EmailEditor = () => {
@@ -16,13 +18,54 @@ const EmailEditor = () => {
     <p>This email is going to be sent using the power of Nodemailer and Agenda</p>
     <p>Thank you</p>`
   );
+  const { isLoaded, isSignedIn, userId } = useAuth();
 
-  const [error, setError] = useState(false);
+  const navigate = useNavigate();
+  const { state } = useLocation();
+
   const [loading, setLoading] = useState(false);
 
   const saveTemplate = async () => {
+    if (!templateName || !offerName || !subject || !offerName) {
+      toast.error("All the fields are mandatory");
+      return;
+    }
+
+    setLoading(true);
+
+    const response = await fetch(
+      `${import.meta.env.VITE_SERVER_URL}/create/template`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          templateName,
+          offerName,
+          subject,
+          email,
+          userId,
+        }),
+      }
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+
+      console.log(data);
+      navigate(`/dashboard/${state.id}`);
+    }
+
     toast.success("Template has been created");
+    setLoading(false);
   };
+
+  useEffect(() => {
+    if (!isSignedIn && isLoaded) {
+      navigate("/");
+    }
+  }, [isLoaded, isSignedIn]);
 
   return (
     <div>
@@ -57,7 +100,11 @@ const EmailEditor = () => {
         <TipTap email={email} setEmail={setEmail} />
 
         <div className="flex gap-2 mt-2">
-          <Button className="self-start" onClick={saveTemplate}>
+          <Button
+            className="self-start"
+            onClick={saveTemplate}
+            disabled={loading}
+          >
             Save Template
           </Button>
           <Button className="self-start" variant="outline">

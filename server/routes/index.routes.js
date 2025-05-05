@@ -3,6 +3,7 @@ const router = express.Router();
 
 const Sequence = require("../models/sequence");
 const SourceList = require("../models/source-list");
+const Template = require("../models/template");
 
 const { convertEmailStringToArray } = require("../utils/helpers");
 
@@ -66,6 +67,24 @@ router.post("/sequence", async (req, res) => {
   }
 });
 
+router.post("/templates", async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    const templates = await Template.find({ userId: userId });
+
+    if (!templates) {
+      throw new Error("No templates were found");
+    }
+
+    res.json({
+      templates,
+    });
+  } catch (error) {
+    res.status(500).json(error.message);
+  }
+});
+
 router.post("/create/sequence", async (req, res) => {
   const { userId, name, description } = req.body;
 
@@ -113,6 +132,36 @@ router.post("/create/source-list", async (req, res) => {
 
     res.json({
       sourceList: result,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+});
+
+router.post("/create/template", async (req, res) => {
+  try {
+    const { templateName, offerName, subject, email, userId } = req.body;
+
+    if (!userId) {
+      throw new Error("You need to be signed in to create a template");
+    }
+
+    if (!templateName || !offerName || !subject || !email) {
+      throw new Error("All the fields are mandatory");
+    }
+
+    const template = await Template.create({
+      templateName,
+      offerName,
+      email,
+      subject,
+      userId,
+    });
+
+    res.json({
+      template,
     });
   } catch (error) {
     res.status(500).json({

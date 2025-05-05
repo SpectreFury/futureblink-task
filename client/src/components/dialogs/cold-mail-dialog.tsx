@@ -14,23 +14,58 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "../ui/label";
-import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
+import { useAuth } from "@clerk/react-router";
 
 type ColdMailDialogProps = {
   setCurrentDialog: any;
 };
 
 const ColdMailDialog = ({ setCurrentDialog }: ColdMailDialogProps) => {
+  const { userId } = useAuth();
+
   const [emailTemplates, setEmailTemplates] = useState([
     {
-      id: "1",
-      name: "Sample Template (added by SalesBlink)",
+      _id: "1",
+      templateName: "Sample Template (added by SalesBlink)",
+      subject: "fsjkfl;jf;l",
+      offerName: "fsdfkl;sjjsflfjl",
+      email: "This is an email",
+      userId: "1",
     },
   ]);
   const [selectedEmailTemplate, setSelectedEmailTemplate] = useState("");
 
   const navigate = useNavigate();
+  const params = useParams();
+
+  const fetchTemplates = async () => {
+    const response = await fetch(
+      `${import.meta.env.VITE_SERVER_URL}/templates`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId,
+        }),
+      }
+    );
+
+    if (response.ok) {
+      const { templates } = await response.json();
+
+      setEmailTemplates(templates);
+    }
+  };
+
+  useEffect(() => {
+    if (userId) {
+      fetchTemplates();
+    }
+  }, [userId]);
 
   return (
     <DialogContent>
@@ -49,7 +84,9 @@ const ColdMailDialog = ({ setCurrentDialog }: ColdMailDialogProps) => {
           </SelectTrigger>
           <SelectContent>
             {emailTemplates.map((template) => (
-              <SelectItem value={template.id}>{template.name}</SelectItem>
+              <SelectItem value={template._id}>
+                {template.templateName}
+              </SelectItem>
             ))}
           </SelectContent>
         </Select>
@@ -58,7 +95,7 @@ const ColdMailDialog = ({ setCurrentDialog }: ColdMailDialogProps) => {
           <Button
             className="grow cursor-pointer"
             variant="outline"
-            onClick={() => navigate("/email-editor")}
+            onClick={() => navigate("/email-editor", { state: params })}
           >
             New Template <PlusCircle />
           </Button>
