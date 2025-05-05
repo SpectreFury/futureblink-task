@@ -13,4 +13,4 @@
 ## TODAY
 
 - [x] Make sequence start point
-- [ ] Make the connection from lead source to sequence start point whenever inserted
+- [x] Make the connection from lead source to sequence start point whenever inserted

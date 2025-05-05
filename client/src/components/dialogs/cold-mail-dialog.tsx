@@ -54,20 +54,47 @@ const ColdMailDialog = ({ setCurrentDialog, setOpen }: ColdMailDialogProps) => {
 
     if (!selectedTemplate) return;
 
+    const plusNode = nodes.find((node) => node.id === "plus");
+
+    if (!plusNode) return;
+
+    // New node to insert at plus node position
     const newNode = {
       id: uuidv4(),
       type: "emailTemplate",
-      position: { x: 0, y: 0 },
+      position: { x: plusNode?.position.x - 150, y: plusNode?.position.y },
       data: {
         label: selectedTemplate.templateName,
         template: selectedTemplate,
       },
     };
 
-    // Edge logic
+    // Make plus node shift
+    const newNodes = nodes.map((node) =>
+      node.id === "plus"
+        ? {
+            ...node,
+            position: { x: node.position.x, y: node.position.y + 200 },
+          }
+        : node
+    );
 
-    setNodes([...nodes, newNode]);
-    setEdges([...edges]);
+    // This removes the connection between sequence start and plus
+    const newEdges = edges.filter((edge) => edge.id !== "startPoint-plus");
+
+    const newEdge = {
+      id: `${newNode.id}-plus`,
+      source: newNode.id,
+      target: "plus",
+    };
+
+    // Edge logic
+    // If edge target is sequenceStartPoint -> Lead Source Node
+    // If sequenceStartPoint is source and plus is target -> No nodes are added
+    console.log(edges);
+
+    setNodes([...newNodes, newNode]);
+    setEdges([...newEdges, newEdge]);
 
     setOpen(false);
 
