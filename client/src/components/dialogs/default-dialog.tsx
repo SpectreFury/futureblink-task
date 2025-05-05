@@ -1,11 +1,11 @@
 import { Clock, Mail } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import {
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "./ui/dialog";
+} from "../ui/dialog";
 
 type DefaultDialogProps = {
   setCurrentDialog: any;

@@ -1,21 +1,15 @@
-import { Clock, Mail, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Button } from "../ui/button";
 import { Handle, Position } from "@xyflow/react";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogFooter,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 
-type DialogTypes = "default" | "cold-mail" | "wait-delay";
+type DialogTypes = "default" | "cold-mail" | "wait-delay" | "create-template";
+
 import { useState } from "react";
-import DefaultDialog from "../default-dialog";
-import ColdMailDialog from "../cold-mail-dialog";
-import WaitDelayDialog from "../wait-delay-dialog";
+import DefaultDialog from "../dialogs/default-dialog";
+import ColdMailDialog from "../dialogs/cold-mail-dialog";
+import WaitDelayDialog from "../dialogs/wait-delay-dialog";
+import CreateTemplateDialog from "../dialogs/create-template-dialog";
 
 const PlusNode = () => {
   const [open, setOpen] = useState(false);
@@ -46,6 +40,9 @@ const PlusNode = () => {
         )}
         {currentDialog === "wait-delay" && (
           <WaitDelayDialog setCurrentDialog={setCurrentDialog} />
+        )}
+        {currentDialog === "create-template" && (
+          <CreateTemplateDialog setCurrentDialog={setCurrentDialog} />
         )}
       </Dialog>
     </div>
