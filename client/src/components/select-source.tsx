@@ -26,13 +26,14 @@ type SourceListItem = {
 
 type SelectSourceProps = {
   setCurrentModal: any;
+  setOpen: any;
 };
 
-const SelectSource = ({ setCurrentModal }: SelectSourceProps) => {
+const SelectSource = ({ setCurrentModal, setOpen }: SelectSourceProps) => {
   const [sourceList, setSourceList] = useState<SourceItem[]>([]);
   const [selectedSourceList, setSelectedSourceList] = useState("");
 
-  const { nodes, setNodes } = useReactFlowStore();
+  const { nodes, edges, setNodes, setEdges } = useReactFlowStore();
 
   const insertSelectedSource = async () => {
     // Make sure there is a selected node before making a new node
@@ -57,7 +58,15 @@ const SelectSource = ({ setCurrentModal }: SelectSourceProps) => {
       },
     };
 
+    const newEdge = {
+      id: `${newNode.id}-startPoint`,
+      source: newNode.id,
+      target: "sequence-start-point",
+    };
+
     setNodes([...nodes, newNode]);
+    setEdges([...edges, newEdge]);
+    setOpen(false);
   };
 
   const fetchSourceLists = async () => {

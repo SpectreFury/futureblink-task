@@ -7,9 +7,10 @@ import { Button } from "./ui/button";
 
 type CreateSourceProps = {
   setCurrentModal: any;
+  setOpen: any
 };
 
-const CreateSource = ({ setCurrentModal }: CreateSourceProps) => {
+const CreateSource = ({ setCurrentModal, setOpen }: CreateSourceProps) => {
   const [sourceListName, setSourceListName] = useState("");
   const [emails, setEmails] = useState("");
 

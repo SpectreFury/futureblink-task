@@ -15,11 +15,13 @@ import LeadSourceNode from "./nodes/LeadSourceNode";
 import LeadNode from "./nodes/LeadNode";
 import { useReactFlowStore } from "@/store/useReactFlowStore";
 import SequenceStartPointNode from "./nodes/SequenceStartPointNode";
+import PlusNode from "./nodes/PlusNode";
 
 const nodeTypes = {
   leadSource: LeadSourceNode,
   lead: LeadNode,
   sequenceStartPoint: SequenceStartPointNode,
+  plus: PlusNode,
 };
 
 const SequenceEditor = () => {
@@ -89,10 +91,26 @@ const SequenceEditor = () => {
         {
           id: "sequence-start-point",
           type: "sequenceStartPoint",
-          position: { x: centerX, y: 200 },
+          position: { x: centerX, y: 250 },
           data: {
             label: "Sequence Start Point",
           },
+        },
+        {
+          id: "plus",
+          type: "plus",
+          position: { x: centerX + 125, y: 400 },
+          data: {
+            label: "Plus Button",
+          },
+        },
+      ]);
+
+      setEdges([
+        {
+          id: "startPoint-plus",
+          source: "sequence-start-point",
+          target: "plus",
         },
       ]);
     }

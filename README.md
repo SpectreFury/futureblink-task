@@ -1,4 +1,4 @@
-# futureblink-task
+# FutureBlink Task
 
 ## Status
 
@@ -12,5 +12,5 @@
 
 ## TODAY
 
-- Make the connection from lead source to sequence start point
-- Make sequence start point
+- [x] Make sequence start point
+- [ ] Make the connection from lead source to sequence start point whenever inserted

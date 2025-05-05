@@ -13,10 +13,10 @@ const LeadSourceNode = () => {
       <Dialog open={open} onOpenChange={(isOpen) => setOpen(isOpen)}>
         <DialogContent className="sm:max-w-[425px]">
           {currentModal === "select" && (
-            <SelectSource setCurrentModal={setCurrentModal} />
+            <SelectSource setCurrentModal={setCurrentModal} setOpen={setOpen}/>
           )}
           {currentModal === "create" && (
-            <CreateSource setCurrentModal={setCurrentModal} />
+            <CreateSource setCurrentModal={setCurrentModal} setOpen={setOpen}/>
           )}
         </DialogContent>
       </Dialog>
