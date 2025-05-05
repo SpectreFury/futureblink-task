@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { Label } from "../ui/label";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 type ColdMailDialogProps = {
   setCurrentDialog: any;
@@ -28,6 +29,8 @@ const ColdMailDialog = ({ setCurrentDialog }: ColdMailDialogProps) => {
     },
   ]);
   const [selectedEmailTemplate, setSelectedEmailTemplate] = useState("");
+
+  const navigate = useNavigate();
 
   return (
     <DialogContent>
@@ -55,7 +58,7 @@ const ColdMailDialog = ({ setCurrentDialog }: ColdMailDialogProps) => {
           <Button
             className="grow cursor-pointer"
             variant="outline"
-            onClick={() => setCurrentDialog("create-template")}
+            onClick={() => navigate("/email-editor")}
           >
             New Template <PlusCircle />
           </Button>

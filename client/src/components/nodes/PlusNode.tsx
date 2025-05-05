@@ -9,7 +9,6 @@ import { useState } from "react";
 import DefaultDialog from "../dialogs/default-dialog";
 import ColdMailDialog from "../dialogs/cold-mail-dialog";
 import WaitDelayDialog from "../dialogs/wait-delay-dialog";
-import CreateTemplateDialog from "../dialogs/create-template-dialog";
 
 const PlusNode = () => {
   const [open, setOpen] = useState(false);
@@ -40,9 +39,6 @@ const PlusNode = () => {
         )}
         {currentDialog === "wait-delay" && (
           <WaitDelayDialog setCurrentDialog={setCurrentDialog} />
-        )}
-        {currentDialog === "create-template" && (
-          <CreateTemplateDialog setCurrentDialog={setCurrentDialog} />
         )}
       </Dialog>
     </div>
