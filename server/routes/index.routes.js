@@ -25,6 +25,16 @@ router.get("/sequence", async (req, res) => {
   }
 });
 
+router.post("/schedule", async (req, res) => {
+  try {
+    console.log(req.body);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+});
+
 router.post("/sequence", async (req, res) => {
   try {
     const { sequenceId, userId } = req.body;

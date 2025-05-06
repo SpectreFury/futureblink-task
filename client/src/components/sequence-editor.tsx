@@ -1,6 +1,7 @@
 import { useAuth } from "@clerk/react-router";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams } from "react-router";
+import { format } from "date-fns";
 import {
   Background,
   BackgroundVariant,
@@ -18,6 +19,17 @@ import SequenceStartPointNode from "./nodes/SequenceStartPointNode";
 import PlusNode from "./nodes/PlusNode";
 import EmailTemplateNode from "./nodes/EmailTemplateNode";
 import WaitDelayNode from "./nodes/WaitDelayNode";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
+import { Label } from "./ui/label";
+import { Input } from "./ui/input";
+import { toast } from "sonner";
 
 const nodeTypes = {
   leadSource: LeadSourceNode,
@@ -33,7 +45,6 @@ const SequenceEditor = () => {
   const [description, setDescription] = useState("");
   const { userId } = useAuth();
   const reactFlowWrapper = useRef<HTMLDivElement | null>(null);
-
   const {
     nodes,
     edges,
@@ -43,8 +54,46 @@ const SequenceEditor = () => {
     onEdgesChange,
     onNodesChange,
   } = useReactFlowStore();
-
   const { id } = useParams();
+  const [date, setDate] = useState<string>(format(new Date(), "yyyy-MM-dd"));
+  const [time, setTime] = useState<string>(format(new Date(), "kk:mm"));
+
+  const scheduleEmail = async () => {
+    // If no lead source node , then return
+    const leadNode = nodes.find((node) => node.type === "lead");
+    if (!leadNode) {
+      toast.error("Need a lead node to schedule email");
+      return;
+    }
+
+    // If no template node, then return
+    const templateNode = nodes.find((node) => node.type === "emailTemplate");
+    if (!templateNode) {
+      toast.error("Need a template node to schedule emails");
+    }
+
+    const response = await fetch(
+      `${import.meta.env.VITE_SERVER_URL}/schedule`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nodes: nodes,
+          edges: edges,
+          scheduleTime: time,
+          scheduleDate: date,
+        }),
+      }
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+
+      console.log(data);
+    }
+  };
 
   const fetchSequence = async () => {
     const response = await fetch(
@@ -127,7 +176,35 @@ const SequenceEditor = () => {
           <div className="text-2xl font-medium">{name}</div>
           <div className="text-lg text-muted-foreground">{description}</div>
         </div>
-        <Button>Save</Button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button>Save</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Sequence Settings</DialogTitle>
+            </DialogHeader>
+            <div className="flex flex-col gap-2">
+              <Label>Launch on Date</Label>
+              <Input
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label>Time</Label>
+              <Input
+                type="time"
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+              />
+            </div>
+            <DialogFooter>
+              <Button onClick={scheduleEmail}>Save</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
       <div className="w-full h-full" ref={reactFlowWrapper}>
         <ReactFlow

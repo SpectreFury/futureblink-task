@@ -95,6 +95,12 @@ const ColdMailDialog = ({ setCurrentDialog, setOpen }: ColdMailDialogProps) => {
         source: lastNode.id,
         target: newNode.id,
       };
+    } else if (lastNode.type === "waitDelay") {
+      connection = {
+        id: `${lastNode.id}-${newNode.id}`,
+        source: lastNode.id,
+        target: newNode.id,
+      };
     } else {
       // Connection to be from start point to new node
       connection = {
@@ -119,7 +125,7 @@ const ColdMailDialog = ({ setCurrentDialog, setOpen }: ColdMailDialogProps) => {
     console.log("Last added node: ", getLastNode());
 
     setNodes([...newNodes, newNode]);
-    setEdges([...newEdges, newEdge, connection]);
+    setEdges([...newEdges, connection, newEdge]);
 
     setCurrentDialog("default");
     setOpen(false);

@@ -1,6 +1,7 @@
 import Navbar from "@/components/navbar";
 import TipTap from "@/components/tiptap";
 import { Button } from "@/components/ui/button";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@clerk/react-router";
 import { Label } from "@radix-ui/react-label";
