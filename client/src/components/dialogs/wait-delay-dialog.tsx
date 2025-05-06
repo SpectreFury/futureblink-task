@@ -29,7 +29,7 @@ const WaitDelayDialog = ({
   setOpen,
 }: WaitDelayDialogProps) => {
   const [waitInput, setWaitInput] = useState("");
-  const [waitType, setWaitType] = useState([
+  const [waitType, _setWaitType] = useState([
     {
       label: "Days",
       value: "days",
