@@ -15,7 +15,9 @@ This is a application made as a task for FutureBlink
 client/.env
 
 VITE_CLERK_PUBLISHABLE_KEY=
+
 CLERK_SECRET_KEY=
+
 VITE_SERVER_URL=
 
 ### Server
@@ -23,9 +25,13 @@ VITE_SERVER_URL=
 server/.env
 
 PORT=
+
 MONGODB_URI=
+
 GOOGLE_CLIENT_ID=
+
 GOOGLE_CLIENT_SECRET=
+
 GOOGLE_REFRESH_TOKEN=
 
 ## Features
