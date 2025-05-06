@@ -58,7 +58,11 @@ const SequenceEditor = () => {
   const [date, setDate] = useState<string>(format(new Date(), "yyyy-MM-dd"));
   const [time, setTime] = useState<string>(format(new Date(), "kk:mm"));
 
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const scheduleEmail = async () => {
+    setLoading(true);
     // If no lead source node , then return
     const leadNode = nodes.find((node) => node.type === "lead");
     if (!leadNode) {
@@ -89,10 +93,11 @@ const SequenceEditor = () => {
     );
 
     if (response.ok) {
-      const data = await response.json();
-
-      console.log(data);
+      toast.success("Email has been scheduled");
+      setOpen(false);
     }
+
+    setLoading(false);
   };
 
   const fetchSequence = async () => {
@@ -176,7 +181,7 @@ const SequenceEditor = () => {
           <div className="text-2xl font-medium">{name}</div>
           <div className="text-lg text-muted-foreground">{description}</div>
         </div>
-        <Dialog>
+        <Dialog open={open} onOpenChange={(isOpen) => setOpen(isOpen)}>
           <DialogTrigger asChild>
             <Button>Save</Button>
           </DialogTrigger>
@@ -201,7 +206,9 @@ const SequenceEditor = () => {
               />
             </div>
             <DialogFooter>
-              <Button onClick={scheduleEmail}>Save</Button>
+              <Button onClick={scheduleEmail} disabled={loading}>
+                Save
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>

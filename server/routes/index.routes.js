@@ -73,6 +73,10 @@ router.post("/schedule", async (req, res) => {
         );
       }
     });
+
+    res.json({
+      message: "Email has been scheduled",
+    });
   } catch (error) {
     res.status(500).json({
       message: error.message,
