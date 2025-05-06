@@ -1,5 +1,7 @@
 # FutureBlink Task
 
+[Deployment Link](https://futureblink-task.vercel.app)
+
 This is a application made as a task for FutureBlink
 
 ## Installation
