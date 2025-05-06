@@ -18,6 +18,7 @@ interface ReactFlowStoreState {
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
   getLastNode: () => Node | null;
+  getLastNonPlusNode: () => Node | null;
 }
 
 const useReactFlowStore = create<ReactFlowStoreState>((set, get) => ({
@@ -42,6 +43,13 @@ const useReactFlowStore = create<ReactFlowStoreState>((set, get) => ({
     if (!get().nodes.length) return null;
 
     return get().nodes.at(-1) as Node;
+  },
+  getLastNonPlusNode: () => {
+    if (!get().nodes.length) return null;
+
+    return get()
+      .nodes.filter((node) => node.id !== "plus")
+      .at(-1) as Node;
   },
 }));
 

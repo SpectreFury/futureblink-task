@@ -109,6 +109,9 @@ const DashboardPage = () => {
             <CardDescription>These are all the users sequences</CardDescription>
           </CardHeader>
           <CardContent>
+            {!sequences.length && (
+              <div className="font-medium">No sequences found, create it</div>
+            )}
             {sequences.map((sequence) => (
               <SequenceItem
                 key={sequence._id}

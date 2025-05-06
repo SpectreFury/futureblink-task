@@ -95,8 +95,6 @@ const ColdMailDialog = ({ setCurrentDialog, setOpen }: ColdMailDialogProps) => {
     let connection;
     const lastNode = getLastNode()!;
 
-    console.log(lastNode);
-
     if (lastNode.type === "emailTemplate") {
       // Make the connection to be from previous node to new node
 
