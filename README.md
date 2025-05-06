@@ -17,6 +17,6 @@
 - [ ] Add Save Dialog with date picker
 - [ ] Send the data to backend
 
-ISSUES
-New logic is messing up insert email template so fix that
-Probably the same issue in the delay node aswell
+NOTES
+Get the emails from the lead nodes
+Get the delays from the delay nodes

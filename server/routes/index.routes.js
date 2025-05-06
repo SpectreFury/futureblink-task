@@ -30,8 +30,49 @@ router.post("/schedule", async (req, res) => {
   try {
     const { nodes, edges, scheduledDate, scheduledTime } = req.body;
 
-    await agenda.start();
-    await agenda.schedule("in 5 seconds", "send email");
+    // Only finding a single node
+    const leadNode = nodes.find((node) => node.type === "lead");
+
+    // Filter all the template nodes
+    const templateNodes = nodes.filter((node) => node.type === "emailTemplate");
+
+    if (!leadNode) {
+      throw new Error("No lead node");
+    }
+
+    if (!templateNodes.length) {
+      throw new Error("No template node");
+    }
+
+    templateNodes.map(async (node) => {
+      const delayValue = node.data.delay.delayValue;
+      const delayType = node.data.delay.delayType;
+
+      const data = {
+        emails: leadNode.data.leadSource.emails.join(", "),
+        template: node.data.template,
+      };
+
+      console.log(
+        `Sending email to Lead: ${leadNode.data.label}\nDelay: ${
+          !delayValue ? "0" : delayValue
+        } ${!delayType ? "" : delayType}`
+      );
+
+      // Start agenda
+      await agenda.start();
+
+      if (!delayValue && !delayType) {
+        // If there is no delay, send instantly
+        await agenda.now("send email", data);
+      } else {
+        await agenda.schedule(
+          `in ${delayValue} ${delayType}`,
+          "send email",
+          data
+        );
+      }
+    });
   } catch (error) {
     res.status(500).json({
       message: error.message,

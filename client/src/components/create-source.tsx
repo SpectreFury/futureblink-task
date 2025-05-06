@@ -7,7 +7,7 @@ import { Button } from "./ui/button";
 
 type CreateSourceProps = {
   setCurrentModal: any;
-  setOpen: any
+  setOpen: any;
 };
 
 const CreateSource = ({ setCurrentModal, setOpen }: CreateSourceProps) => {
@@ -42,9 +42,8 @@ const CreateSource = ({ setCurrentModal, setOpen }: CreateSourceProps) => {
     );
 
     if (response.ok) {
-      const data = await response.json();
-
-      console.log(data);
+      setOpen(false);
+      setCurrentModal("select");
     }
 
     setLoading(false);

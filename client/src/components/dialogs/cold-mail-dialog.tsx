@@ -21,6 +21,11 @@ import { useReactFlowStore } from "@/store/useReactFlowStore";
 
 import { v4 as uuidv4 } from "uuid";
 
+interface Delay {
+  delayTime: any; // Or a more specific type like number or string
+  delayType: any; // Or a more specific type like 'fixed' | 'variable'
+}
+
 type ColdMailDialogProps = {
   setCurrentDialog: any;
   setOpen: any;
@@ -59,13 +64,17 @@ const ColdMailDialog = ({ setCurrentDialog, setOpen }: ColdMailDialogProps) => {
     if (!plusNode) return;
 
     // New node to insert at plus node position
-    const newNode = {
+    let newNode: any = {
       id: uuidv4(),
       type: "emailTemplate",
       position: { x: plusNode?.position.x - 150, y: plusNode?.position.y },
       data: {
         label: selectedTemplate.templateName,
         template: selectedTemplate,
+        delay: {
+          delayValue: null,
+          delayType: null,
+        },
       },
     };
 
@@ -90,12 +99,25 @@ const ColdMailDialog = ({ setCurrentDialog, setOpen }: ColdMailDialogProps) => {
 
     if (lastNode.type === "emailTemplate") {
       // Make the connection to be from previous node to new node
+
       connection = {
         id: `${lastNode.id}-${newNode.id}`,
         source: lastNode.id,
         target: newNode.id,
       };
     } else if (lastNode.type === "waitDelay") {
+      newNode = {
+        ...newNode,
+        data: {
+          ...newNode.data,
+          delay: {
+            ...newNode.data.delay,
+            delayValue: (lastNode.data.delay as Delay).delayTime,
+            delayType: (lastNode.data.delay as Delay).delayType,
+          },
+        },
+      };
+
       connection = {
         id: `${lastNode.id}-${newNode.id}`,
         source: lastNode.id,
@@ -115,14 +137,6 @@ const ColdMailDialog = ({ setCurrentDialog, setOpen }: ColdMailDialogProps) => {
       source: newNode.id,
       target: "plus",
     };
-
-    // Edge logic
-    // If edge target is sequenceStartPoint -> Lead Source Node
-    // If sequenceStartPoint is source and plus is target -> No nodes are added
-    console.log("Nodes: ", nodes);
-    console.log("Edges: ", edges);
-
-    console.log("Last added node: ", getLastNode());
 
     setNodes([...newNodes, newNode]);
     setEdges([...newEdges, connection, newEdge]);
