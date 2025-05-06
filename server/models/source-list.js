@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const sourceListSchema = new mongoose.Schema({
   name: {
@@ -14,4 +14,4 @@ const sourceListSchema = new mongoose.Schema({
 
 const SourceList = mongoose.model("SourceList", sourceListSchema);
 
-module.exports = SourceList;
+export default SourceList

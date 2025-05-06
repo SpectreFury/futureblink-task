@@ -82,8 +82,8 @@ const SequenceEditor = () => {
         body: JSON.stringify({
           nodes: nodes,
           edges: edges,
-          scheduleTime: time,
-          scheduleDate: date,
+          scheduledTime: time,
+          scheduledDate: date,
         }),
       }
     );

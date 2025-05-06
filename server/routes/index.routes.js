@@ -1,11 +1,12 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
 
-const Sequence = require("../models/sequence");
-const SourceList = require("../models/source-list");
-const Template = require("../models/template");
+import Sequence from "../models/sequence.js";
+import Template from "../models/template.js";
+import SourceList from "../models/source-list.js";
 
-const { convertEmailStringToArray } = require("../utils/helpers");
+import { convertEmailStringToArray } from "../utils/helpers.js";
+import { agenda } from "../utils/agenda.js";
 
 router.get("/sequence", async (req, res) => {
   try {
@@ -27,7 +28,10 @@ router.get("/sequence", async (req, res) => {
 
 router.post("/schedule", async (req, res) => {
   try {
-    console.log(req.body);
+    const { nodes, edges, scheduledDate, scheduledTime } = req.body;
+
+    await agenda.start();
+    await agenda.schedule("in 5 seconds", "send email");
   } catch (error) {
     res.status(500).json({
       message: error.message,
@@ -180,4 +184,4 @@ router.post("/create/template", async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

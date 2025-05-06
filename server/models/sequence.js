@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const sequenceSchema = new mongoose.Schema({
   userId: {
@@ -14,4 +14,4 @@ const sequenceSchema = new mongoose.Schema({
 
 const Sequence = mongoose.model("Sequence", sequenceSchema);
 
-module.exports = Sequence;
+export default Sequence;
