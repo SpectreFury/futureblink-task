@@ -10,7 +10,13 @@
 - [x] Create a source list from emails
 - [x] Insert the source list as a Node
 
-## TODAY
+## TODOS
 
-- [x] Make sequence start point
-- [x] Make the connection from lead source to sequence start point whenever inserted
+- [ ] Make sure Wait/Delay option is not available till you insert a emailTemplate node
+- [ ] Add Delete Node Options
+- [ ] Add Save Dialog with date picker
+- [ ] Send the data to backend
+
+ISSUES
+New logic is messing up insert email template so fix that
+Probably the same issue in the delay node aswell

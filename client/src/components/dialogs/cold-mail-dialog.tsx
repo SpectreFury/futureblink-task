@@ -81,8 +81,8 @@ const ColdMailDialog = ({ setCurrentDialog, setOpen }: ColdMailDialogProps) => {
 
     // This removes the connection between sequence start and plus if it exists
     const newEdges = edges.filter((edge) => edge.target !== "plus");
-    // Add a connection from startPoint to newNode
 
+    // Add a connection from startPoint to newNode
     let connection;
     const lastNode = getLastNode()!;
 
@@ -121,6 +121,7 @@ const ColdMailDialog = ({ setCurrentDialog, setOpen }: ColdMailDialogProps) => {
     setNodes([...newNodes, newNode]);
     setEdges([...newEdges, newEdge, connection]);
 
+    setCurrentDialog("default");
     setOpen(false);
   };
 

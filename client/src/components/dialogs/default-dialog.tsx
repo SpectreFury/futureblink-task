@@ -6,12 +6,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../ui/dialog";
+import { useReactFlowStore } from "@/store/useReactFlowStore";
+import { toast } from "sonner";
 
 type DefaultDialogProps = {
   setCurrentDialog: any;
 };
 
 const DefaultDialog = ({ setCurrentDialog }: DefaultDialogProps) => {
+  const { nodes } = useReactFlowStore();
+
   return (
     <DialogContent>
       <DialogHeader>
@@ -32,7 +36,14 @@ const DefaultDialog = ({ setCurrentDialog }: DefaultDialogProps) => {
           </Button>
           <Button
             className="grow h-25 text-lg cursor-pointer"
-            onClick={() => setCurrentDialog("wait-delay")}
+            onClick={() => {
+              if (!nodes.find((node) => node.type === "emailTemplate")) {
+                toast.error("Insert a template node to use Wait/Delay");
+                return;
+              }
+
+              setCurrentDialog("wait-delay");
+            }}
           >
             <Clock />
             Wait/Delay

@@ -35,10 +35,16 @@ const PlusNode = () => {
           <DefaultDialog setCurrentDialog={setCurrentDialog} />
         )}
         {currentDialog === "cold-mail" && (
-          <ColdMailDialog setCurrentDialog={setCurrentDialog} setOpen={setOpen}/>
+          <ColdMailDialog
+            setCurrentDialog={setCurrentDialog}
+            setOpen={setOpen}
+          />
         )}
         {currentDialog === "wait-delay" && (
-          <WaitDelayDialog setCurrentDialog={setCurrentDialog} />
+          <WaitDelayDialog
+            setCurrentDialog={setCurrentDialog}
+            setOpen={setOpen}
+          />
         )}
       </Dialog>
     </div>

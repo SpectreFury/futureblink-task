@@ -17,6 +17,7 @@ import { useReactFlowStore } from "@/store/useReactFlowStore";
 import SequenceStartPointNode from "./nodes/SequenceStartPointNode";
 import PlusNode from "./nodes/PlusNode";
 import EmailTemplateNode from "./nodes/EmailTemplateNode";
+import WaitDelayNode from "./nodes/WaitDelayNode";
 
 const nodeTypes = {
   leadSource: LeadSourceNode,
@@ -24,6 +25,7 @@ const nodeTypes = {
   sequenceStartPoint: SequenceStartPointNode,
   plus: PlusNode,
   emailTemplate: EmailTemplateNode,
+  waitDelay: WaitDelayNode,
 };
 
 const SequenceEditor = () => {
