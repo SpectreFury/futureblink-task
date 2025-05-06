@@ -1,22 +1,38 @@
 # FutureBlink Task
 
-## Status
+This is a application made as a task for FutureBlink
 
-- [x] Add Authentication - Bonus
-- [x] Ability to add a sequence
-- [x] Abily to get sequences for DB
-- [x] Implement React Flow
-- [x] Zustand global state for react flow
-- [x] Create a source list from emails
-- [x] Insert the source list as a Node
+## Installation
 
-## TODOS
+- Git clone the repo
+- npm install inside both client and server directory
+- npm run dev inside both client and server directory
 
-- [ ] Make sure Wait/Delay option is not available till you insert a emailTemplate node
-- [ ] Add Delete Node Options
-- [ ] Add Save Dialog with date picker
-- [ ] Send the data to backend
+## Environment Variables
 
-NOTES
-Get the emails from the lead nodes
-Get the delays from the delay nodes
+### Client
+
+client/.env
+
+VITE_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+VITE_SERVER_URL=
+
+### Server
+
+server/.env
+
+PORT=
+MONGODB_URI=
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GOOGLE_REFRESH_TOKEN=
+
+## Features
+
+- Authentication - Bonus Points
+- Add Ability to select a sequence
+- Ability to add lead nodes, cold mail nodes, delay nodes
+- Rich text email editor to create a template
+- Nodemailer and agenda used on the backend to mail using Gmail OAuth
+- Emails will be sent according to delays sent on the client
