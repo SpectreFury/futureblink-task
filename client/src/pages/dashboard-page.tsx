@@ -24,6 +24,7 @@ import { useAuth } from "@clerk/react-router";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import SequenceItem from "@/components/sequence-item";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type Sequence = {
   _id: string;
@@ -38,20 +39,21 @@ const DashboardPage = () => {
   const [description, setDescription] = useState("");
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showSkeleton, setShowSkeleton] = useState(true);
   const [error, setError] = useState("");
   const { isSignedIn, isLoaded, userId } = useAuth();
   const navigate = useNavigate();
 
   const fetchSequences = async () => {
+    setShowSkeleton(true);
     const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/sequence`);
 
     if (response.ok) {
       const { sequences } = await response.json();
 
       setSequences(sequences);
-
-      console.log(sequences);
     }
+    setShowSkeleton(false);
   };
 
   const createSequence = async () => {
@@ -109,8 +111,17 @@ const DashboardPage = () => {
             <CardDescription>These are all the users sequences</CardDescription>
           </CardHeader>
           <CardContent>
-            {!sequences.length && (
-              <div className="font-medium">No sequences found, create it</div>
+            {showSkeleton && (
+              <div className="flex items-center space-x-4">
+                <Skeleton className="h-12 w-12 rounded-full" />
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-[250px]" />
+                  <Skeleton className="h-4 w-[200px]" />
+                </div>
+              </div>
+            )}
+            {!showSkeleton && !sequences.length && (
+              <div className="font-medium">No sequences were found</div>
             )}
             {sequences.map((sequence) => (
               <SequenceItem
