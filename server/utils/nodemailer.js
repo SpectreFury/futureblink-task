@@ -4,13 +4,12 @@ config();
 import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.sendgrid.net",
+  port: 465,
+  secure: true,
   auth: {
-    type: "OAuth2",
-    user: "soni.ayush.2212@gmail.com",
-    clientId: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    refreshToken: process.env.GOOGLE_REFRESH_TOKEN,
+    user: "apikey",
+    pass: process.env.SENDGRID_API_KEY,
   },
 });
 
